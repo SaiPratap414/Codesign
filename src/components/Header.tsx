@@ -17,7 +17,7 @@ export default function Header() {
                         target="_blank"
                         className="dark:text-white text-black hover:text-purple-400 transition-colors underline"
                     >
-                        Pratap
+                        Sai Pratap
                     </Link>
                 </div>
             </nav>
