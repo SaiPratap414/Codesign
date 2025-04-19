@@ -9,27 +9,21 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Input } from "./ui/input";
 import { useFontSize } from "@/hooks/useFontSize";
 import { Label } from "./ui/label";
-import { Switch } from "@/components/ui/switch"
-import { useBackground } from "@/hooks/useBackground";
-import uploadToCloud from "@/utils/uploadToCloud";
+import { Switch } from "@/components/ui/switch";
 import exportAsImage from "@/utils/exportAsImage";
 import { useCodePreview } from "@/hooks/useCodePreview";
-import PopupDialog from "./PopupDialog";
-import { useState } from "react";
-import { Button } from "./ui/button"
+
+import { Button } from "./ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
+} from "./ui/dropdown-menu";
+import { useBackground } from "@/hooks/useBackground";
 import { useDarkMode } from "@/hooks/useDarkMode";
 
-
 export default function Dock() {
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
-    const [cloudLink, setCloudLink] = useState<string>("")
-    const [isCopied, setIsCopied] = useState(false)
     const { gradient, setGradient } = useGradient();
     const { setTheme } = useTheme();
     const { setLanguage } = useLanguage();
@@ -45,30 +39,10 @@ export default function Dock() {
         }
     };
 
-    const handleUploadToCloud = async () => {
-        const node = getPreviewRef();
-        if (node) {
-            try {
-                const url = await uploadToCloud(node);
-                setCloudLink(url);
-                setIsDialogOpen(true);
-            } catch (err) {
-                console.error("Upload failed:", err);
-            }
-        }
-    };
-
     return (
         <section className="fixed bottom-0 w-full max-sm:overflow-x-auto flex justify-center">
             <div className="flex justify-center w-fit min-w-[40vw] max-sm:min-w-full max-sm:w-full max-sm:justify-start">
                 <div className="flex items-center h-20 px-10 rounded-t-xl bg-white text-black bg-opacity-10 backdrop-blur-lg border dark:border-white/20 dark:shadow-none dark:text-white">
-                    <PopupDialog
-                        setIsCopied={setIsCopied}
-                        isCopied={isCopied}
-                        cloudLink={cloudLink}
-                        isDialogOpen={isDialogOpen}
-                        setIsDialogOpen={setIsDialogOpen}
-                    />
                     <div className="flex items-center gap-12 max-sm:gap-6">
                         <div className="space-y-1">
                             <Label className="text-xs" htmlFor="gradient">Gradient</Label>
@@ -82,7 +56,7 @@ export default function Dock() {
                                 </SelectTrigger>
                                 <SelectContent className="!w-48">
                                     {
-                                        gradientArray.map((item: { name: string; gradient: string; }, index: number) => (
+                                        gradientArray.map((item, index) => (
                                             <SelectItem
                                                 key={index}
                                                 value={item.gradient}
@@ -162,14 +136,11 @@ export default function Dock() {
                                     <DropdownMenuItem onClick={handleExportImage}>
                                         Download Image
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={handleUploadToCloud}>
-                                        Get URL
-                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
                         <div className="space-y-1 flex flex-col">
-                            <Label className="text-xs" htmlFor="darkMode">Background</Label>
+                            <Label className="text-xs" htmlFor="background">Background</Label>
                             <Switch checked={isBackgroundHidden} onCheckedChange={setIsBackgroundHidden} className="dark:data-[state=checked]:bg-blue-500" />
                         </div>
                         <div className="space-y-1 flex flex-col">
